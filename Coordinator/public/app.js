@@ -19,8 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const item = document.createElement('li');
       
       const link = document.createElement('a');
-      link.href = `http://${host}:${port}`;
-      link.textContent = `Host: ${host}, Port: ${port}`;
+      link.textContent = `${host}:${port}`;
       link.target = '_blank';
       link.title = 'Ir a la instancia';
   

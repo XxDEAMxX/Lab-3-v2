@@ -3,7 +3,7 @@ const dotenv = require('dotenv');
 const WebSocket = require('ws');
 const path = require('path');
 
-const app = express();
+const app = express( { path: './.env' } );
 dotenv.config();
 const port = process.env.INSTANCE_PORT;
 

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Logs</title>
+</head>
+<body>
+    <h1>Logs en tiempo real</h1>
+    <div id="logs"></div>
+
+    <script>
+        const ws = new WebSocket('ws://localhost:3002');
+
+        ws.onmessage = (event) => {
+            const log = JSON.parse(event.data).log;
+            const logElement = document.createElement('p');
+            logElement.textContent = log;
+            document.getElementById('logs').appendChild(logElement);
+        };
+    </script>
+</body>
+</html>

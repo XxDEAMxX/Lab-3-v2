@@ -5,7 +5,7 @@ const path = require('path');
 
 const app = express( { path: './.env' } );
 dotenv.config();
-const port = process.env.INSTANCE_PORT;
+const port = process.env.PORT;
 
 let logicalTime = new Date();
 let logs = [];

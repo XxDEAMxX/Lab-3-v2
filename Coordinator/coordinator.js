@@ -20,14 +20,6 @@ const instances = [];
 const wss = new WebSocket.Server({ noServer: true });
 let connectedClients = [];
 
-wss.on('connection', (ws) => {
-  connectedClients.push(ws);
-
-  ws.on('close', () => {
-    connectedClients = connectedClients.filter(client => client !== ws);
-  });
-});
-
 function broadcastLogs(log) {
   connectedClients.forEach((client) => {
     if (client.readyState === WebSocket.OPEN) {
@@ -126,7 +118,7 @@ async function getInstanceTimes() {
   return times;
 }
 
-async function synchronizeClocks(req, res) {
+app.post('/sync-clocks', async (req, res) => {
   const coordinatorTime = await getWorldTime();
   const instanceTimes = await getInstanceTimes();
 
@@ -148,9 +140,7 @@ async function synchronizeClocks(req, res) {
   }
 
   res.status(200).json({ message: 'Sincronización completada' });
-}
-
-app.post('/sync-clocks', synchronizeClocks);
+});
 
 const server = app.listen(port, () => {
   console.log(`${user} ${password} ${host}`);
@@ -177,10 +167,16 @@ app.get('/worldtime', async (req, res) => {
   }
 });
 
-
-
 server.on('upgrade', (request, socket, head) => {
   wss.handleUpgrade(request, socket, head, (ws) => {
     wss.emit('connection', ws, request);
+  });
+});
+
+wss.on('connection', (ws) => {
+  connectedClients.push(ws);
+
+  ws.on('close', () => {
+    connectedClients = connectedClients.filter(client => client !== ws);
   });
 });

@@ -20,7 +20,7 @@ function getFormattedTime() {
 }
 
 function logMessage(message) {
-    const timestampedMessage = `[${new Date().toISOString()}] ${message}`;
+    const timestampedMessage = `${new Date().toISOString()} - ${message}`;
     console.log(timestampedMessage);
     logs.push(timestampedMessage);
 }
@@ -51,7 +51,7 @@ app.use((req, res, next) => {
 function applyRandomOffset() {
     const offset = Math.floor(Math.random() * 121) - 60;
     logicalTime.setSeconds(logicalTime.getSeconds() + offset);
-    logMessage(`Applied offset: ${offset} seconds`);
+    logMessage(`Desincronización: ${offset}`);
 }
 
 app.get('/logs', (req, res) => {
@@ -72,7 +72,7 @@ app.post('/sync', express.json(), (req, res) => {
 
     if (typeof offset === 'number') {
         logicalTime.setSeconds(logicalTime.getSeconds() + offset);
-        logMessage(`Synchronized logical time with offset: ${offset} seconds`);
+        logMessage(`sincronizado aplicada: ${offset}`);
         res.status(200).json({ message: 'Logical time synchronized successfully', newTime: getFormattedTime() });
     } else {
         res.status(400).json({ error: 'Invalid offset value. It must be a number.' });
@@ -80,20 +80,20 @@ app.post('/sync', express.json(), (req, res) => {
 });
 
 const server = app.listen(port, () => {
-    logMessage(`Instance running at ${port}`);
+    logMessage(`instancia corriendo ${port}`);
     applyRandomOffset();
 });
 
 const wss = new WebSocket.Server({ server });
 
 wss.on('connection', (ws) => {
-    logMessage('New client connected');
+    logMessage('Cliente conectado');
     clients.add(ws);
 
     ws.send(JSON.stringify({ time: getFormattedTime() }));
 
     ws.on('close', () => {
-        logMessage('Client disconnected');
+        logMessage('Cliente desconectado');
         clients.delete(ws);
     });
 });

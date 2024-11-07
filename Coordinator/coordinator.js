@@ -31,7 +31,7 @@ function broadcastLogs(log) {
 app.use(express.static('public')); 
 
 function logMessage(message) {
-  const timestampedMessage = `[${new Date().toISOString()}] ${message}`;
+  const timestampedMessage = `${new Date().toISOString()} - ${message}`;
   console.log(timestampedMessage);
   logs.push(timestampedMessage);
   broadcastLogs(timestampedMessage);
@@ -145,7 +145,7 @@ app.post('/sync-clocks', async (req, res) => {
 const server = app.listen(port, () => {
   console.log(`${user} ${password} ${host}`);
 
-  logMessage(`Coordinator running at ${port}`);
+  logMessage(`Coordinador corriendo ${port}`);
 });
 
 async function getWorldTime() {

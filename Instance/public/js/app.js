@@ -34,8 +34,7 @@ function fetchLogs() {
                 data.logs.forEach(log => {
                     const row = document.createElement('tr');
                     row.innerHTML = `
-                        <td>${log.split(']')[0] + ']'}</td>
-                        <td>${log.split('] ')[1]}</td>
+                        <td>${log}</td>
                     `;
                     logsTbody.appendChild(row);
                 });
